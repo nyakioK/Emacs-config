@@ -36,7 +36,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(ivy use-package)))
+ '(package-selected-packages
+   '(## erlang elixir-mode lsp-mode doom-modeline ivy use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -61,8 +62,20 @@
          ("C-k" . ivy-previous-line)
          ("C-d" . ivy-reverse-i-search-kill))
   :config
-   (ivy-mode 1))
+  (ivy-mode 1))
+
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :custom (doom-modeline-height 10))
+
+(use-package lsp-mode
+  :commands lsp
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :custom
+  (lsp-enable-which-key-integration t))
 
 
-
-
+(unless (package-installed-p 'elixir-mode)
+  (package-install 'elixir-mode))

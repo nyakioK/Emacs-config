@@ -31,22 +31,33 @@
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+(column-number-mode)
+(display-line-numbers-mode t)
+;;disable line comments for some modes
+(dolist (mode '(org-mode-hook
+		term-mode-hook
+		shell-mode-hook
+		eshell-mode-hook))
+(add-hook mode (lambda () (display-line-numbers-mode 0))))
+
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Custom-set-variables was added by Custom.
+ ;; If you edit it by hand, Welcome to the Emacs shell
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(doom-modeline ivy use-package)))
+ '(package-selected-packages
+   '(doom-modeline ivy use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+
  )
 
 (use-package ivy
-  :diminish
-  :bind (("C-s" . swiper)
+  :dimini  :bind (("C-s" . swiper)
          :map ivy-minibuffer-map
          ("TAB" . ivy-alt-done)
          ("C-f" . ivy-alt-done)
@@ -65,8 +76,33 @@
 
 (use-package doom-modeline
   :ensure t
-  :init (doom-modeline-mode 1))
+  :init (doom-modeline-mode 1)
+  :custom (doom-modeline-height 10))
 
+(use-package doom-themes)
 
+;;Rainbow delimeter to see if parenthesis are closed
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
 
+;; show descriptions for key bindngs.
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 0.3))
 
+;;more detailed modes**
+(use-package ivy-rich
+  :init
+  (ivy-rich-mode 1))
+
+(use-package counsel
+  :bind(("M-x" . counsel-M-x)
+	("C-x b" . counsel-ibuffer)
+	("C-x C-f" . counsel-find-file)
+	:map minibuffer-local-map
+	("C-r" . counsel-minibuffer-history))
+  :config
+  (setq ivy-initial-inputs-alist nil)) ;; Don't start searches with ^
+     
